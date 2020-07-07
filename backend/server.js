@@ -14,12 +14,26 @@ for (let i = 0; i < values.length; i++) {
         // console.log(cards.length)
     }
 };
-const chunk = 5
-for (let i = 0; i < cards.length; i += chunk) {
-    let result = []
-    result = cards.slice(i, i + chunk)
-    console.log(result)
+const shuffled = cards.sort(() => Math.random() - 0.5)
+// console.log(shuffled)
+
+// const players = new Array(30);
+
+// const chunk = 5
+// for (let i = 0; i < cards.length; i += chunk) {
+//     let result = []
+//     result = cards.slice(i, i + chunk)
+//     console.log(result)
+// }
+
+function splitArray(arr, players) {
+    let chunks = [], i = 0, n = arr.length
+    while (i < n) {
+        chunks.push(arr.slice(i, i += players))
+    }
+    return chunks
 }
+console.log(splitArray(shuffled, 10))
 
 // const splitCards = (n) => {
 //     const result = []
@@ -32,9 +46,7 @@ for (let i = 0; i < cards.length; i += chunk) {
 app.get('/cards', (req, res) => {
     res.send("cards")
 })
-// app.get("*", (req, res) => {
-//     res.sendFile(path.resolve(__dirname, 'build', 'index.html'));
-// });
+
 const port = process.env.PORT || 5000;
 
 app.listen(port, () => {
