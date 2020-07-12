@@ -1,11 +1,15 @@
 import React from 'react';
 import Main from './Components/main';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import History from './Components/History';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function App() {
+const App = () => {
   return (
     <div >
-      <Main />
+      <Router history={History}>
+        <Route path="/" exact component={Main} />
+      </Router>
     </div>
   );
 }

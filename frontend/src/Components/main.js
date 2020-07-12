@@ -1,39 +1,50 @@
 import React, { useState, useEffect } from 'react';
+import History from './History';
+import * as QueryString from "query-string"
 import { Jumbotron } from 'react-bootstrap';
 
-const Main = () => {
+const Main = (props) => {
 
     const [cards, setCards] = useState([])
-    const [playersNumber, setPlayersNumber] = useState('');
+    const [playersNumber, setPlayersNumber] = useState(0);
+    const [number, setNumber] = useState(0);
     const [error, setError] = useState(false)
 
-    const getCardsApi = () => {
-        return fetch('http://localhost:5000/cards', {
-            method: "Get"
+
+    const getCardsApi = (number) => {
+        return fetch(`http://localhost:5000/cards?number=${number}`, {
+            method: "Get",
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            }
         }).then((response) => response.json()).catch((err) => console.log(err))
     }
-    const getCards = () => (
-        getCardsApi().then((data) => {
+    const getCards = (number) => (
+        getCardsApi(number).then((data) => {
             if (data.error) {
                 setError(true)
             }
             setCards(data.result)
-            // console.log(data.result)
         }).catch((err) => console.log(err))
     )
 
     useEffect(() => {
-        getCards()
-    })
+        const params = QueryString.parse(props.location.search);
+        const number = params.numb
+        setNumber(number)
+    }, [props.location.search])
 
-    const submitHandler = (e) => {
+    const submitHandler = (e, number) => {
         e.preventDefault()
         if (playersNumber < 1) {
             return setError(true)
         } else {
-            console.log('success')
             setError(false)
+            setNumber(playersNumber)
             setPlayersNumber('')
+            History.push('/?number=' + playersNumber)
+            getCards(number)
         }
     }
     const showError = () => (
@@ -59,6 +70,7 @@ const Main = () => {
                     </form>
                     {showError()}
                     {JSON.stringify(cards)}
+                    {number}
                 </div>
             </div>
         </div>
