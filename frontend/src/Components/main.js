@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Jumbotron } from 'react-bootstrap';
 
 const Main = () => {
@@ -6,6 +6,25 @@ const Main = () => {
     const [cards, setCards] = useState([])
     const [playersNumber, setPlayersNumber] = useState('');
     const [error, setError] = useState(false)
+
+    const getCardsApi = () => {
+        return fetch('http://localhost:5000/cards', {
+            method: "Get"
+        }).then((response) => response.json()).catch((err) => console.log(err))
+    }
+    const getCards = () => (
+        getCardsApi().then((data) => {
+            if (data.error) {
+                setError(true)
+            }
+            setCards(data.result)
+            // console.log(data.result)
+        }).catch((err) => console.log(err))
+    )
+
+    useEffect(() => {
+        getCards()
+    })
 
     const submitHandler = (e) => {
         e.preventDefault()
@@ -39,6 +58,7 @@ const Main = () => {
                         <button type="submit" className="btn btn-outline-primary" >Start</button>
                     </form>
                     {showError()}
+                    {JSON.stringify(cards)}
                 </div>
             </div>
         </div>

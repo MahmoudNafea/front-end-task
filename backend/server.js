@@ -1,7 +1,12 @@
 const express = require("express");
+const cors = require("cors");
+
 
 const app = express();
 app.use(express.json());
+app.use(cors());
+
+// const { splitArrayFunc } = require('./playground')
 
 const suits = ["S", "H", "D", "C"];
 const values = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"];
@@ -11,41 +16,38 @@ for (let i = 0; i < values.length; i++) {
     for (let x = 0; x < suits.length; x++) {
         const card = { value: values[i], suit: suits[x] }
         cards.push(card)
-        // console.log(cards.length)
     }
 };
 const shuffled = cards.sort(() => Math.random() - 0.5)
-// console.log(shuffled)
 
-// const players = new Array(30);
+const splitArray = (arr = shuffled, n = 4) => {
+    // if (n < 2) {
+    //     return arr
+    // }
+    let size;
+    let result = [];
 
-// const chunk = 5
-// for (let i = 0; i < cards.length; i += chunk) {
-//     let result = []
-//     result = cards.slice(i, i + chunk)
-//     console.log(result)
-// }
-
-function splitArray(arr, players) {
-    let chunks = [], i = 0, n = arr.length
-    while (i < n) {
-        chunks.push(arr.slice(i, i += players))
+    for (let i = 0; i < arr.length; i++) {
+        if (arr.length % n === 0) {
+            size = arr.length / n
+            while (i < arr.length) {
+                result.push(arr.slice(i, i += size))
+            }
+        } else {
+            while (i < arr.length) {
+                size = Math.floor(arr.length / n)
+                result.push(arr.slice(i, i += size))
+            }
+        }
     }
-    return chunks
-}
-console.log(splitArray(shuffled, 10))
 
-// const splitCards = (n) => {
-//     const result = []
-//     const forPlayer = Math.ceil(cards / n)
-//     result.push(forPlayer)
-//     // console.log(result)
-// }
-// console.log(splitCards(3))
+    return JSON.stringify({ result })
+}
 
 app.get('/cards', (req, res) => {
-    res.send("cards")
+    res.send(splitArray())
 })
+// app.get('/cards', splitArray)
 
 const port = process.env.PORT || 5000;
 
