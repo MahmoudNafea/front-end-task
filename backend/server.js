@@ -20,7 +20,7 @@ for (let i = 0; i < values.length; i++) {
 };
 const shuffled = cards.sort(() => Math.random() - 0.5)
 
-const splitArray = (arr = shuffled, n) => {
+const splitArray = (arr, n) => {
     // if (n < 2) {
     //     return arr
     // }
@@ -45,9 +45,8 @@ const splitArray = (arr = shuffled, n) => {
 }
 
 app.get('/cards', (req, res) => {
-    let n = req.query
-    console.log(n)
-    res.send(splitArray(n))
+    let n = parseInt(req.query.number)
+    res.send(splitArray(shuffled, n))
 })
 // app.get('/cards', splitArray)
 

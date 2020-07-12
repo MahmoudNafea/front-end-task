@@ -4,12 +4,10 @@ import * as QueryString from "query-string"
 import { Jumbotron } from 'react-bootstrap';
 
 const Main = (props) => {
-
     const [cards, setCards] = useState([])
     const [playersNumber, setPlayersNumber] = useState(0);
     const [number, setNumber] = useState(0);
     const [error, setError] = useState(false)
-
 
     const getCardsApi = (number) => {
         return fetch(`http://localhost:5000/cards?number=${number}`, {
@@ -29,11 +27,12 @@ const Main = (props) => {
         }).catch((err) => console.log(err))
     )
 
-    useEffect(() => {
-        const params = QueryString.parse(props.location.search);
-        const number = params.numb
-        setNumber(number)
-    }, [props.location.search])
+    // useEffect(() => {
+    //     const params = QueryString.parse(props.location.search);
+    //     const number = params.number
+    //     setNumber(number)
+    //     console.log(number)
+    // }, [props.location.search])
 
     const submitHandler = (e, number) => {
         e.preventDefault()
@@ -44,7 +43,7 @@ const Main = (props) => {
             setNumber(playersNumber)
             setPlayersNumber('')
             History.push('/?number=' + playersNumber)
-            getCards(number)
+            getCards(playersNumber)
         }
     }
     const showError = () => (
