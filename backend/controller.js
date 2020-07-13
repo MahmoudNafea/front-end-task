@@ -1,10 +1,3 @@
-const express = require("express");
-const cors = require("cors");
-
-const app = express();
-app.use(express.json());
-app.use(cors());
-
 const suits = ["S", "H", "D", "C"];
 const values = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"];
 const cards = [];
@@ -17,7 +10,7 @@ for (let i = 0; i < values.length; i++) {
 };
 const shuffled = cards.sort(() => Math.random() - 0.5)
 
-const splitArray = (arr, n) => {
+exports.splitArray = (arr = shuffled, n) => {
     // if (n < 2) {
     //     return arr
     // }
@@ -40,13 +33,3 @@ const splitArray = (arr, n) => {
 
     return JSON.stringify({ result })
 }
-app.get('/cards', (req, res) => {
-    let n = parseInt(req.query.number)
-    res.send(splitArray(shuffled, n))
-})
-
-const port = process.env.PORT || 5000;
-
-app.listen(port, () => {
-    console.log(`Server is up on port ${port}`);
-});
