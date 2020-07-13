@@ -4,10 +4,11 @@ import History from './History';
 import { Jumbotron } from 'react-bootstrap';
 
 const Main = () => {
-    const [cards, setCards] = useState('')
+    const [cards, setCards] = useState([])
     const [playersNumber, setPlayersNumber] = useState('');
     const [number, setNumber] = useState(0);
-    const [error, setError] = useState(false)
+    const [error, setError] = useState(false);
+    const [success, setSuccess] = useState(false);
 
     const getCards = (number) => (
         getCardsApi(number).then((data) => {
@@ -24,10 +25,12 @@ const Main = () => {
             return setError(true)
         } else {
             setError(false)
+            setSuccess(true)
             setNumber(playersNumber)
             setPlayersNumber('')
             History.push('/?number=' + playersNumber)
             getCards(playersNumber)
+            setSuccess(true)
         }
     }
     const showError = () => (
@@ -36,7 +39,10 @@ const Main = () => {
         </div>
     );
     const showCards = () => (
-        <div className="alert alert-info" style={{ display: cards ? '' : "none", margin: '50px 0' }}>
+        <div className="alert alert-info" style={{ display: cards && success ? '' : "none", margin: '50px 0' }}>
+            {/* {cards.map((c, i) => (
+                { c }
+            ))} */}
             {JSON.stringify(cards)}
         </div>
     )

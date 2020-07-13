@@ -18,9 +18,9 @@ for (let i = 0; i < values.length; i++) {
 const shuffled = cards.sort(() => Math.random() - 0.5)
 
 const splitArray = (arr, n) => {
-    // if (n < 2) {
-    //     return arr
-    // }
+    if (n < 2) {
+        return JSON.stringify({ result: arr })
+    }
     let size;
     let result = [];
 
@@ -40,7 +40,7 @@ const splitArray = (arr, n) => {
 
     return JSON.stringify({ result })
 }
-app.get('/cards', (req, res) => {
+app.get('/api/cards', (req, res) => {
     let n = parseInt(req.query.number)
     res.send(splitArray(shuffled, n))
 })

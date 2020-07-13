@@ -1,5 +1,7 @@
+import { URL } from '../config';
+
 export const getCardsApi = (number) => {
-    return fetch(`http://localhost:5000/cards?number=${number}`, {
+    return fetch(`${URL}/cards?number=${number}`, {
         method: "Get",
         headers: {
             Accept: 'application/json',
